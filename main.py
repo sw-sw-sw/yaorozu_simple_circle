@@ -24,8 +24,8 @@ def tf_loop(shared_positions, shared_forces, num_agents, world_width, world_heig
         np.frombuffer(shared_forces.get_obj(), dtype=np.float32).reshape((num_agents, 2))[:] = new_forces
 
         # tf_time.value = timer.calculate()
-        # tf_time.value = timer.calculate_time()
-        # timer.adjust_time(box2d_time.value)
+        tf_time.value = timer.calculate_time()
+        timer.sleep_time(box2d_time.value)
         timer.print_fps(1)
 
 
@@ -52,8 +52,8 @@ def box2d_loop(shared_positions, shared_forces, num_agents, world_width, world_h
             rendering_queue.put(new_positions)
             
         # box2d_time.value = timer.calculate()
-        # box2d_time.value = timer.calculate_time()
-        # timer.adjust_time(tf_time.value)
+        box2d_time.value = timer.calculate_time()
+        timer.sleep_time(tf_time.value)
         timer.print_fps(1)
 
 
