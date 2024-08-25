@@ -13,7 +13,7 @@ classDiagram
         +managePredation()
         +updatePopulation()
         +getPopulationStatistics() : PopulationStatistics
-        -createNewAgent(species: String, position: Vector2D, agent_id: int) : int
+        -createNewAgent(species: String, position: Vector2D) : int
         -removeAgent(index: int)
         -initializeSimulations()
     }
@@ -52,16 +52,7 @@ classDiagram
 
 
 
-    class AgentData {
-        +id: int
-        +position: Vector2D
-        +velocity: Vector2D
-        +force: Vector2D
-        +species: String
-        +state: String
-        +energy: float
-        +age: int
-    }
+
 
 
     class Box2DSimulation {
@@ -106,6 +97,8 @@ classDiagram
         -active_mask: np.Array
         +draw(positions: Vector2D[] )
         +create_creature(positions: np.arrays, agent_id: int, agent_species_id : int)
+        -remove_creature()
+
         +create_death_effect(positions: np.arrray)
         +render_creatures(positions: np.arrays)
     }
@@ -124,20 +117,42 @@ classDiagram
     }
 
     Ecosystem --> SharedMemoryManager: uses
-    Ecosystem --> Box2DSimulation: Manage(Initialize)
-    Ecosystem --> TensorFlowSimulation: Manage(Initialize)
-    Ecosystem --> VisualSystem: positions \n agent_id \n agent_species \n active_mask \n\n when initialize agent
-
+    Ecosystem ..> VisualSystem: [queue] \n\n add_agent(\n position, \n agent_id, \n agent_species\n)\n -> agent_radius \n\n\n remove_agent(agent_id)\n -> step complete
+    Ecosystem ..> Box2DSimulation: [queue] \n create_agent ( \n    positions, \n    velocity, \n    agent species, \n    agent_id, \n    agent_radius \n)-> step complete \n\n\n remove agent(agent_id) \n -> step complete
+    DeathEffect ..> Ecosystem: [queue] \n death_effect_finished(agent_id) -> True
 
     SharedMemoryManager --> TensorFlowSimulation : positions tf.Tensor\nagent_ids tf.Tensor\nagent_species tf.Tensor
     SharedMemoryManager <-- TensorFlowSimulation : forces tf.Tensor
     SharedMemoryManager --> Box2DSimulation : forces \nList[Tuple[float, float]]
     SharedMemoryManager <-- Box2DSimulation : positions \nList[Tuple[float, float]]
     SharedMemoryManager --> VisualSystem: positions \n agent_id \n agent_species \n active_mask \n\n for render
-    SharedMemoryManager  -- AgentData: contains
 
 
     VisualSystem --> Creature: positions \nagent_id \nagent_species
     VisualSystem --> DeathEffect: positions
+
+```
+
+
+```mermaid
+classDiagram
+
+    class main {
+    +tf_loop()
+    +box2d_loop()
+    +visual_system_loop()
+    +ecosystem_loop()
+    }
+
+    main -- Ecosystem 
+    main -- SharedMemoryManager 
+    main -- TensorFlowSimulation
+    main -- Box2DSimulation
+    main -- VisualSystem
+    
+    Ecosystem <..> SharedMemoryManager
+    SharedMemoryManager <..> Box2DSimulation
+    SharedMemoryManager <..> TensorFlowSimulation
+    SharedMemoryManager <..> VisualSystem
 
 ```
