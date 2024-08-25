@@ -14,7 +14,7 @@ def tf_loop(shared_positions, shared_forces, num_agents, world_width, world_heig
     from tensorflow_simulation import TensorFlowSimulation
     from timer import Timer
     tf_sim = TensorFlowSimulation(num_agents, world_width, world_height)
-    timer = Timer("Tensorflow")
+    timer = Timer("Tensor ")
     
     while running.value:
         timer.start()        
@@ -38,7 +38,7 @@ def box2d_loop(shared_positions, shared_forces, num_agents, world_width, world_h
     initial_velocities = np.random.uniform(INITIAL_VELOCITY_MIN, INITIAL_VELOCITY_MAX, (num_agents, 2)).astype(np.float32)
     box2d_sim = Box2DSimulation(world_width, world_height)
     box2d_sim.create_bodies(initial_positions, initial_velocities)
-    timer = Timer("Box2d")
+    timer = Timer("Box2d  ")
     
     while running.value:
         timer.start() # timer
@@ -63,7 +63,7 @@ def render_loop(world_width, world_height, rendering_queue, running):
     pygame.init()
     renderer = PygameRenderer(world_width, world_height)
     clock = pygame.time.Clock()
-    timer = Timer("Render")
+    timer = Timer("Render ")
 
     while running.value:
         timer.start()
