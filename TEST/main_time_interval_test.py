@@ -54,7 +54,11 @@ def box2d_loop(shared_positions, shared_forces, num_agents, world_width, world_h
 
 
 def render_loop(world_width, world_height, rendering_queue, running, fps_update_interval):
+<<<<<<< HEAD
     from pygame_renderer import PygameRenderer
+=======
+    from visual_system import PygameRenderer
+>>>>>>> parent of f011000 (thread化を開始。shared_memory_manager config.py timer.pyを変更)
     from timer import Timer
     pygame.init()
     renderer = PygameRenderer(world_width, world_height)
